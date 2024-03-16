@@ -1,28 +1,51 @@
 package com.example.ai;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import java.awt.Color;
-import java.awt.Graphics;
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
+import java.util.List;
+import java.util.Map;
 
 public class Controller {
-    private final String MNIST_DIRECTORY_PATH = "C:\\Users\\pivov\\Робочий стіл\\MNIST\\training";
-    private final ImageHelper imageHelper = new ImageHelper();
+    private static final int EPOCHS = 10; // Количество эпох обучения
+    private static final String MNIST_DIRECTORY_PATH = "C:\\Users\\pivov\\Робочий стіл\\MNIST\\training";
+    private static final ImageHelper imageHelper = new ImageHelper();
 
 
     public static void main(String[] args) {
-//        // Инициализация нейронной сети
-//        NeuralNetwork network = new NeuralNetwork();
-//        network.initializeNetwork();
-//
+        //процесс обучение:
+        NeuralNetwork network = new NeuralNetwork();
+        network.initializeWeights();
+        try {
+            Map<Integer, List<double[]>> imagesAndLabels = imageHelper.loadImagesAndConvert(MNIST_DIRECTORY_PATH);
+
+            for (int epoch = 0; epoch < EPOCHS; epoch++) {
+                for (Map.Entry<Integer, List<double[]>> entry : imagesAndLabels.entrySet()) {
+                    int label = entry.getKey();
+                    List<double[]> images = entry.getValue();
+
+                    for (double[] imagePixels : images) {
+                        double[] outputDataFromForwardPropagation = network.forwardPropagation(imagePixels);
+                        network.backPropagation(imagePixels, outputDataFromForwardPropagation, label);
+                    }
+                }
+                // Здесь можно добавить логику для оценки производительности сети после каждой эпохи
+                System.out.println("Epoch " + epoch + " completed");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //testing:
+        try {
+            BufferedImage testImage = ImageIO.read(new File("C:\\Users\\pivov\\Робочий стіл\\MNIST\\testing\\5\\15.jpg"));
+            var actualResult = network.forwardPropagation(imageHelper.convertImageToArray(testImage));
+            int a = 1+2;
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
 //        // Загрузка данных для обучения (здесь просто пример, нужно загрузить реальные данные)
 //        double[][] trainingInputs = new double[][] {
 //                // Предположим, что у нас есть обучающие данные MNIST
@@ -56,16 +79,8 @@ public class Controller {
 
     }
 
-    private static double calculateLoss(double[] outputs, int actualDigit) {
-        // Реализация функции потерь (например, квадратичная ошибка)
-        return 0; // Примерный код, требует реализации
-    }
-
-    public void initializeNetwork() {
-        // Инициализация весов и структуры сети
-    }
-
-
-
-
+//    private static double calculateLoss(double[] outputs, int actualDigit) {
+//        // Реализация функции потерь (например, квадратичная ошибка)
+//        return 0; // Примерный код, требует реализации
+//    }
 }

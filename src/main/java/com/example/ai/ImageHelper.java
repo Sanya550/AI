@@ -56,7 +56,7 @@ public class ImageHelper {
         return scaledImage;
     }
 
-    private double[] convertImageToArray(BufferedImage image) {
+    public double[] convertImageToArray(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
         double[] array = new double[width * height];

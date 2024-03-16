@@ -6,7 +6,7 @@ import java.util.Random;
 public class NeuralNetwork {
     private static final int INPUT_NODES = 784; // Пример для MNIST
     private static final int HIDDEN_NODES_1 = 16;
-    private static final int HIDDEN_NODES_2 = 20; // Второй скрытый слой
+    private static final int HIDDEN_NODES_2 = 16; // Второй скрытый слой
     private static final int OUTPUT_NODES = 10;
     private static final double LEARNING_RATE = 0.001;
 
@@ -17,8 +17,8 @@ public class NeuralNetwork {
     public static double[][] weightsHiddenOutput; // Веса между вторым скрытым и выходным слоем
     public static double[] outputLayerBias;
     // Добавляем поля для хранения активаций скрытых слоев
-    private double[] hiddenInputs1;
-    private double[] hiddenInputs2;
+    public static double[] hiddenInputs1;
+    public static double[] hiddenInputs2;
 
     // Метод forwardPropagation с двумя скрытыми слоями
     public double[] forwardPropagation(double[] inputs) {
@@ -28,7 +28,7 @@ public class NeuralNetwork {
                 hiddenInputs1[i] += inputs[j] * weightsInputHidden[i][j];
             }
             hiddenInputs1[i] += hiddenLayerBias1[i];
-            hiddenInputs1[i] = MathOperation.relu(hiddenInputs1[i]);
+            hiddenInputs1[i] = MathOperation.sigmoid(hiddenInputs1[i]);
         }
 
         hiddenInputs2 = new double[HIDDEN_NODES_2];
@@ -37,7 +37,7 @@ public class NeuralNetwork {
                 hiddenInputs2[i] += hiddenInputs1[j] * weightsHiddenHidden[i][j];
             }
             hiddenInputs2[i] += hiddenLayerBias2[i];
-            hiddenInputs2[i] = MathOperation.relu(hiddenInputs2[i]);
+            hiddenInputs2[i] = MathOperation.sigmoid(hiddenInputs2[i]);
         }
 
         double[] finalOutputs = new double[OUTPUT_NODES];
@@ -52,7 +52,7 @@ public class NeuralNetwork {
         return finalOutputs;
     }
 
-    public void backPropagation(double[] inputs, int actualDigit, double[] finalOutputs) {
+    public void backPropagation(double[] inputs, double[] finalOutputs, int actualDigit) {
         double[] expectedOutputs = MathOperation.oneHotEncoding(actualDigit);
 
         // Ошибка на выходе
@@ -129,8 +129,7 @@ public class NeuralNetwork {
         }
     }
 
-
-    private void initializeWeights() {
+    public void initializeWeights() {
         Random random = new Random();
 
         weightsInputHidden = new double[HIDDEN_NODES_1][INPUT_NODES];
