@@ -41,46 +41,9 @@ public class Controller {
         try {
             BufferedImage testImage = ImageIO.read(new File("C:\\Users\\pivov\\Робочий стіл\\MNIST\\testing\\5\\15.jpg"));
             var actualResult = network.forwardPropagation(imageHelper.convertImageToArray(testImage));
-            int a = 1+2;
-        }catch (IOException e){
+            int a = 1 + 2;
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        // Загрузка данных для обучения (здесь просто пример, нужно загрузить реальные данные)
-//        double[][] trainingInputs = new double[][] {
-//                // Предположим, что у нас есть обучающие данные MNIST
-//        };
-//        int[] trainingLabels = new int[] {
-//                // Метки для данных MNIST
-//        };
-//
-//        // Процесс обучения
-//        int epochs = 1000; // Количество эпох обучения
-//        for (int epoch = 0; epoch < epochs; epoch++) {
-//            double loss = 0.0;
-//            for (int i = 0; i < trainingInputs.length; i++) {
-//                double[] inputs = trainingInputs[i];
-//                int actualDigit = trainingLabels[i];
-//
-//                // Прямое распространение
-//                double[] outputs = network.forwardPropagation(inputs);
-//
-//                // Оценка потерь (например, квадратичная ошибка)
-//                loss += calculateLoss(outputs, actualDigit);
-//
-//                // Обратное распространение для обновления весов
-//                network.backPropagation(inputs, actualDigit, outputs);
-//            }
-//
-//            // Выводим потери после каждой эпохи, чтобы видеть прогресс
-//            System.out.println("Epoch " + epoch + ": Loss = " + (loss / trainingInputs.length));
-//        }
-
-
     }
-
-//    private static double calculateLoss(double[] outputs, int actualDigit) {
-//        // Реализация функции потерь (например, квадратичная ошибка)
-//        return 0; // Примерный код, требует реализации
-//    }
 }
