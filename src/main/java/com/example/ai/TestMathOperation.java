@@ -227,8 +227,7 @@ public class TestMathOperation {
         double[] numbers = new double[size];
 
         for (int i = 0; i < size; i++) {
-            numbers[i] = 0d;
-//            numbers[i] = (random.nextGaussian()-0.5)*2*Math.sqrt(1d/784d);
+            numbers[i] = (random.nextGaussian()-0.5)*2*Math.sqrt(1d/784d);
         }
         return numbers;
     }
@@ -239,8 +238,7 @@ public class TestMathOperation {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                matrix[i][j] =0d;
-//                matrix[i][j] = (random.nextGaussian()-0.5)*2*Math.sqrt(1d/784d);
+                matrix[i][j] = (random.nextGaussian()-0.5)*2*Math.sqrt(1d/784d);
             }
         }
 
