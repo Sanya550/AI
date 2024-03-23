@@ -58,7 +58,7 @@ public class TestMathOperation {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                result[i][j] = matrix[i][j] + vector[i];
+                result[i][j] = matrix[i][j] + vector[j];
             }
         }
 
@@ -99,6 +99,36 @@ public class TestMathOperation {
                 }
             }
         }
+        return result;
+    }
+
+    public static double[][] multiplyMatrixOnMatrixByElementOnly(double[][] a, double[][] b) {
+        if (a.length != b.length || a[0].length != b[0].length) {
+            throw new IllegalArgumentException("Matrices dimensions must match for element-wise multiplication.");
+        }
+
+        double[][] result = new double[a.length][a[0].length];
+
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < a[0].length; j++) {
+                result[i][j] = a[i][j] * b[i][j];
+            }
+        }
+
+        return result;
+    }
+
+    public static double[][] addNumberToMatrix(double[][] matrix, double number) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        double[][] result = new double[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                result[i][j] = matrix[i][j] + number;
+            }
+        }
+
         return result;
     }
 
@@ -174,12 +204,41 @@ public class TestMathOperation {
         return sigma;
     }
 
+    public static double[][] sigmoidBatch(double[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        double[][] sigma = new double[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                sigma[i][j] = 1 / (1 + Math.pow(Math.E, -matrix[i][j]));
+            }
+        }
+
+        return sigma;
+    }
+
     public static double[] sigmoidPohidna(double[] arr1) {
         double[] sigma = new double[arr1.length];
         for (int i = 0; i < arr1.length; i++) {
             sigma[i] = sigmoidVal(arr1[i]) * (1 - sigmoidVal(arr1[i]));
         }
         return sigma;
+    }
+
+    public static double[][] sigmoidPohidnaBatch(double[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        double[][] result = new double[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                double sigmoidValue = sigmoidVal(matrix[i][j]);
+                result[i][j] = sigmoidValue * (1 - sigmoidValue);
+            }
+        }
+
+        return result;
     }
 
     public static double[] relu(double[] arr1) {
@@ -199,6 +258,18 @@ public class TestMathOperation {
         return softArr;
     }
 
+    public static double[][] softmaxBatch(double[][] matrix) {
+        double[][] result = new double[matrix.length][];
+
+        for (int i = 0; i < matrix.length; i++) {
+            double[] row = matrix[i];
+            double sum = Arrays.stream(row).map(Math::exp).sum();
+            result[i] = Arrays.stream(row).map(Math::exp).map(exp -> exp / sum).toArray();
+        }
+
+        return result;
+    }
+
     public static double sparseCrossEntropy(double[] z, int rightIndex) {
         if (z == null || z.length == 0 || rightIndex < 0 || rightIndex >= z.length) {
             throw new IllegalArgumentException("Проверьте массив и индекс");
@@ -212,6 +283,19 @@ public class TestMathOperation {
             resultArray[i] = i == rightIndex ? 1d : 0d;
         }
         return resultArray;
+    }
+
+    public static double[][] oneHotEncodingBatch(int[] rightIndexes, int outputArraySize) {
+        double[][] resultMatrix = new double[rightIndexes.length][outputArraySize];
+
+        for (int i = 0; i < rightIndexes.length; i++) {
+            int rightIndex = rightIndexes[i];
+            for (int j = 0; j < outputArraySize; j++) {
+                resultMatrix[i][j] = j == rightIndex ? 1.0 : 0.0;
+            }
+        }
+
+        return resultMatrix;
     }
 
     public static double[] ruleDeriv(double[] arr) {
@@ -283,4 +367,31 @@ public class TestMathOperation {
         return result;
     }
 
+    public static double[][] outerProductBatch(double[][] a, double[][] b) {
+        double[][] result = multiplyMatrixOnMatrix(a, b);
+
+        for (int i = 0; i < result.length; i++) {
+            for (int j = 0; j < result[0].length; j++) {
+                result[i][j] /= Test1.BATCH_SIZE;
+            }
+        }
+
+        return result;
+    }
+
+    public static double[] sumColumns(double[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        double[] result = new double[cols]; // Одномерный массив для хранения сумм столбцов
+
+        for (int j = 0; j < cols; j++) {
+            double sum = 0;
+            for (int i = 0; i < rows; i++) {
+                sum += matrix[i][j]; // Суммируем элементы каждого столбца
+            }
+            result[j] = sum; // Сохраняем сумму в одномерном результате
+        }
+
+        return result;
+    }
 }

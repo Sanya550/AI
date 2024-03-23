@@ -37,6 +37,18 @@ public class MathOperation {
         return Arrays.stream(array).map(Math::exp).map(exp -> exp / sum).toArray();
     }
 
+    public static double[][] softmaxBatch(double[][] matrix) {
+        double[][] result = new double[matrix.length][];
+
+        for (int i = 0; i < matrix.length; i++) {
+            double[] row = matrix[i];
+            double sum = Arrays.stream(row).map(Math::exp).sum();
+            result[i] = Arrays.stream(row).map(Math::exp).map(exp -> exp / sum).toArray();
+        }
+
+        return result;
+    }
+
     public static double[] crossEntropyError(double[] predicted, double[] actual) {
         double[] result = new double[predicted.length];
         for (int i = 0; i < actual.length; i++) {
