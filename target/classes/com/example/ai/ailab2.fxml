@@ -1,16 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.ai.Controller">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="643.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ai.Controller">
+   <children>
+      <SplitPane dividerPositions="0.39606126914660833" layoutX="156.0" layoutY="117.0" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <TextField fx:id="learningRateField" layoutX="129.0" layoutY="23.0" prefHeight="25.0" prefWidth="99.0" text="0.002" />
+                  <Text layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Швидкість навчання =" wrappingWidth="134.13671875" />
+                  <TextField fx:id="hDimField" layoutX="129.0" layoutY="57.0" prefHeight="25.0" prefWidth="99.0" text="100" />
+                  <Text layoutX="27.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="К-сть нейронів =" wrappingWidth="106.13671875" />
+                  <TextField fx:id="quantityEpochField" layoutX="129.0" layoutY="89.0" prefHeight="25.0" prefWidth="99.0" text="25" />
+                  <Text layoutX="50.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="К-сть епох =" wrappingWidth="78.13671875" />
+                  <Text layoutX="37.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Розмір батча =" wrappingWidth="86.13671875" />
+                  <TextField fx:id="batchSizeField" layoutX="129.0" layoutY="121.0" prefHeight="25.0" prefWidth="99.0" text="10" />
+                  <Button layoutX="261.0" layoutY="23.0" mnemonicParsing="false" onAction="#result" prefHeight="25.0" prefWidth="182.0" text="Знайти результат" />
+                  <Label fx:id="infoLabel" layoutX="261.0" layoutY="125.0" prefHeight="25.0" prefWidth="302.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="466.0" layoutY="23.0" mnemonicParsing="false" onAction="#loss" prefHeight="25.0" prefWidth="106.0" text="LOSS" />
+                  <Button layoutX="466.0" layoutY="57.0" mnemonicParsing="false" onAction="#accuracyTrain" prefHeight="25.0" prefWidth="106.0" text="Accuracy Train" />
+                  <Button layoutX="466.0" layoutY="89.0" mnemonicParsing="false" onAction="#accuracyTest" prefHeight="25.0" prefWidth="106.0" text="Accuracy Test" />
+                  <Button layoutX="261.0" layoutY="65.0" mnemonicParsing="false" onAction="#clear" prefHeight="25.0" prefWidth="106.0" text="Очистити" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <LineChart fx:id="lineChart" layoutX="23.0" layoutY="-56.0" prefHeight="273.0" prefWidth="641.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

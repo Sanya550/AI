@@ -277,6 +277,14 @@ public class TestMathOperation {
         return -Math.log(z[rightIndex]);
     }
 
+    public static double[] sparseCrossEntropyBatch(double[][] z, int[] y) {
+        double[] crossEntropy = new double[y.length];
+        for (int i = 0; i < y.length; i++) {
+            crossEntropy[i] = -Math.log(z[i][y[i]]);
+        }
+        return crossEntropy;
+    }
+
     public static double[] oneHotEncoding(int rightIndex, int outputArraySize) {
         var resultArray = new double[outputArraySize];
         for (int i = 0; i < outputArraySize; i++) {
@@ -372,7 +380,7 @@ public class TestMathOperation {
 
         for (int i = 0; i < result.length; i++) {
             for (int j = 0; j < result[0].length; j++) {
-                result[i][j] /= Test1.BATCH_SIZE;
+                result[i][j] /= Network.BATCH_SIZE;
             }
         }
 

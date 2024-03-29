@@ -1,49 +1,94 @@
 package com.example.ai;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+
+import javax.swing.*;
 import java.util.List;
-import java.util.Map;
 
 public class Controller {
-    private static final int EPOCHS = 10; // Количество эпох обучения
-    private static final String MNIST_DIRECTORY_PATH = "C:\\Users\\pivov\\Робочий стіл\\MNIST\\training";
-    private static final ImageHelper imageHelper = new ImageHelper();
+    @FXML
+    private TextField learningRateField;
 
+    @FXML
+    private TextField hDimField;
 
-    public static void main(String[] args) {
-        //процесс обучение:
-        NeuralNetwork network = new NeuralNetwork();
-        network.initializeWeights();
-        try {
-            Map<Integer, List<double[]>> imagesAndLabels = imageHelper.loadImagesAndConvert(MNIST_DIRECTORY_PATH);
+    @FXML
+    private TextField quantityEpochField;
 
-            for (int epoch = 0; epoch < EPOCHS; epoch++) {
-                for (Map.Entry<Integer, List<double[]>> entry : imagesAndLabels.entrySet()) {
-                    int label = entry.getKey();
-                    List<double[]> images = entry.getValue();
+    @FXML
+    private TextField batchSizeField;
 
-                    for (double[] imagePixels : images) {
-                        double[] outputDataFromForwardPropagation = network.forwardPropagation(imagePixels);
-                        network.backPropagation(imagePixels, outputDataFromForwardPropagation, label);
-                    }
-                }
-                // Здесь можно добавить логику для оценки производительности сети после каждой эпохи
-                System.out.println("Epoch " + epoch + " completed");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    @FXML
+    private Label infoLabel;
+
+    @FXML
+    private LineChart lineChart;
+
+    @FXML
+    public void result() {
+        infoLabel.setText("Процес запущений...");
+        initializationData();
+        Network.getNetworkResult();
+        infoLabel.setText("Процес завершенний!");
+    }
+
+    @FXML
+    public void clear() {
+        lineChart.getData().clear();
+        lineChart.layout();
+    }
+
+    @FXML
+    public void loss() {
+        drawGraphicLoss(lineChart);
+    }
+
+    @FXML
+    public void accuracyTrain() {
+        drawGraphicAccuracyTrain(lineChart);
+    }
+
+    @FXML
+    public void accuracyTest() {
+        drawGraphicAccuracyTest(lineChart);
+    }
+
+    public void initializationData() {
+        Network.ALPHA = Double.parseDouble(learningRateField.getText());
+        Network.H_DIM = Integer.parseInt(hDimField.getText());
+        Network.NUM_EPOCH = Integer.parseInt(quantityEpochField.getText());
+        Network.BATCH_SIZE = Integer.parseInt(batchSizeField.getText());
+    }
+
+    public static void drawGraphicLoss(LineChart lineChart){
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Loss");
+        for (int i = 0; i < Network.LOSS_EPOCH_RESULT.size(); i++) {
+            series1.getData().add(new XYChart.Data(String.valueOf(i + 1), Network.LOSS_EPOCH_RESULT.get(i)));
         }
+        lineChart.getData().addAll(series1);
+    }
 
-        //testing:
-        try {
-            BufferedImage testImage = ImageIO.read(new File("C:\\Users\\pivov\\Робочий стіл\\MNIST\\testing\\5\\15.jpg"));
-            var actualResult = network.forwardPropagation(imageHelper.convertImageToArray(testImage));
-            int a = 1 + 2;
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void drawGraphicAccuracyTest(LineChart lineChart){
+        XYChart.Series series2 = new XYChart.Series();
+        series2.setName(String.format("Test = %.4f",Network.ACCURACY_TEST.get(Network.ACCURACY_TEST.size()-1)));
+        for (int i = 0; i < Network.ACCURACY_TRAIN.size(); i++) {
+            series2.getData().add(new XYChart.Data(String.valueOf(i + 1), Network.ACCURACY_TEST.get(i)));
         }
+        JOptionPane.showMessageDialog(null, Network.ACCURACY_TEST.get(Network.ACCURACY_TEST.size()-1));
+        lineChart.getData().addAll(series2);
+    }
+
+    public static void drawGraphicAccuracyTrain(LineChart lineChart){
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName(String.format("Train = %.4f",Network.ACCURACY_TRAIN.get(Network.ACCURACY_TRAIN.size()-1)));
+        for (int i = 0; i < Network.ACCURACY_TRAIN.size(); i++) {
+            series1.getData().add(new XYChart.Data(String.valueOf(i + 1), Network.ACCURACY_TRAIN.get(i)));
+        }
+        lineChart.getData().addAll(series1);
     }
 }
